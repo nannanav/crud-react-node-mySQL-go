@@ -1,0 +1,38 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "8800:8800"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:latest
+    container_name: database
+    restart: always
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
