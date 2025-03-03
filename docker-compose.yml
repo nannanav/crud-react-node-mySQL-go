@@ -1,6 +1,7 @@
 services:
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
       - "80:80"
     depends_on:
@@ -13,8 +14,6 @@ services:
     container_name: backend
     ports:
       - "8800:8800"
-    depends_on:
-      - mysql
     networks:
       - app-network
     environment:
