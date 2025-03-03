@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run Docker Compose with build
-docker compose --profile local up --build -d
+docker-compose up --build -d
 
 # Check if the command succeeded
 if [ $? -eq 0 ]; then

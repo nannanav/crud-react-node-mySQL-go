@@ -22,21 +22,6 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
 
-  mysql:
-    image: mysql:8.4.4
-    container_name: database
-    restart: always
-    environment:
-      MYSQL_DATABASE: crud_db
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    volumes:
-      - mysql-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - app-network
-    profiles:
-      - local
-
 
 volumes:
   mysql-data:
