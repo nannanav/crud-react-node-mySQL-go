@@ -1,7 +1,6 @@
 services:
   frontend:
-    image: "${AWS_ECR_URI:-frontend}/frontend:latest"
-    ${AWS_ECR_URI:-build: ./frontend}
+    image: "${AWS_ECR_URI}/frontend:latest"
     container_name: frontend
     ports:
       - "80:80"
@@ -11,8 +10,7 @@ services:
       - app-network
 
   backend:
-    image: "${AWS_ECR_URI:-backend}/backend:latest"
-    ${AWS_ECR_URI:-build: ./backend}
+    image: "${AWS_ECR_URI}/backend:latest"
     container_name: backend
     ports:
       - "8800:8800"

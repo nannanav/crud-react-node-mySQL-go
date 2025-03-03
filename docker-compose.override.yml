@@ -1,8 +1,4 @@
 services:
-  backend:
-    depends_on:
-      - mysql
-
   mysql:
     image: mysql:8.4.4
     container_name: database
@@ -15,3 +11,37 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
+
+  frontend:
+    image: frontend:latest
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    image: backend:latest
+    build: ./backend
+    container_name: backend
+    ports:
+      - "8800:8800"
+    networks:
+      - app-network
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - mysql
+
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
