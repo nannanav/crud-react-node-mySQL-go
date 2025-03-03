@@ -26,7 +26,7 @@ https://vimeo.com/866824528?share=copy
 
 # Need a mySQL DataBase
 <p>I used XAMPP</p> 
-<p>DataBase named test</p>
+<p>DataBase named crud_db</p>
 <p>Table named books</p>
 http://localhost/dashboard/
 
