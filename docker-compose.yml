@@ -1,7 +1,7 @@
 services:
   frontend:
     build: ./frontend
-    image: ${{ secrets.AWS_ECR_URI }}/frontend:latest
+    image: ${AWS_ECR_URI}/frontend:latest
     container_name: frontend
     ports:
       - "80:80"
@@ -12,7 +12,7 @@ services:
 
   backend:
     build: ./backend
-    image: ${{ secrets.AWS_ECR_URI }}/backend:latest
+    image: ${AWS_ECR_URI}/backend:latest
     container_name: backend
     ports:
       - "8800:8800"
