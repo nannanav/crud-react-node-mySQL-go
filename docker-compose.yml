@@ -3,7 +3,7 @@ services:
     image: "${AWS_ECR_URI}/frontend:latest"
     container_name: frontend
     ports:
-      - "80:80"
+      - "8080:8080"
     depends_on:
       - backend
     networks:
