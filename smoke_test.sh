@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # Run Docker Compose with build
 docker-compose up --build -d
 
