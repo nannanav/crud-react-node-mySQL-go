@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 //rafce
 const Add = () => {
 
@@ -20,7 +21,7 @@ const Add = () => {
    const handleClick = async e =>{
     e.preventDefault()
     try{
-        await axios.post("http://localhost:8800/books", book)
+        await axios.post(`${BACKEND_URL}/books`, book)
         navigate("/")
     }catch(err){
         console.log(err)
