@@ -11,7 +11,6 @@ RUN yarn install
 
 # Copy the rest of the application files
 COPY . .
-COPY ../.env .env
 
 # Build the React app
 RUN yarn build

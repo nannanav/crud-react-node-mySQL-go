@@ -8,6 +8,8 @@ services:
       - backend
     networks:
       - app-network
+    environment:
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
 
   backend:
     image: "${AWS_ECR_URI}/backend:latest"
