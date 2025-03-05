@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 # Run Docker Compose with build
-docker-compose up --build -d
+docker-compose -f docker-compose-local.yml up --build -d
 
 # Check if the command succeeded
 if [ $? -eq 0 ]; then
