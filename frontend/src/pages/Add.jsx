@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = window.env?.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL;
 //rafce
 const Add = () => {
 

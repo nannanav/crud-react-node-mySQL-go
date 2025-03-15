@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = window.env?.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL;
 //rafce
 const Books = () => {
 
@@ -10,6 +10,8 @@ const [books, setBooks] = useState([])
 useEffect(()=>{
 const fetchAllBooks = async ()=>{
     try {
+      console.log(`backend url: ${BACKEND_URL}`)
+      console.log(BACKEND_URL)
       const res = await axios.get(`${BACKEND_URL}/books`)  
       setBooks(res.data)
       console.log(res)
@@ -23,8 +25,8 @@ fetchAllBooks()
 
 const handleDelete = async (id)=>{
     try{
-    await axios.delete(`${BACKEND_URL}/books/`+id)
-    window.location.reload()
+      await axios.delete(`${BACKEND_URL}/books/`+id)
+      window.location.reload()
     }catch(err){
         console.log(err)
     }

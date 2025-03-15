@@ -17,11 +17,16 @@ RUN yarn build
 
 # Use Nginx to serve the build files
 FROM nginx:alpine
-# COPY --from=0 /app/build /usr/share/nginx/html
-COPY --from=builder /app/dist /usr/share/nginx/html
+
+WORKDIR /usr/share/nginx/html
+COPY --from=builder /app/dist .
+COPY env.js ./env.js.template
+
+# Install gettext for envsubst (needed for variable substitution)
+RUN apk add --no-cache gettext
 
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Replace environment variables inside env.js at container start
+CMD envsubst < env.js.template > env.js && nginx -g "daemon off;"

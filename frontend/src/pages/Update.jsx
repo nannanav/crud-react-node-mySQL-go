@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = window.env?.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL;
 //rafce
 const Update = () => {
-
 
     const [book, setBook] = useState({
         title: "",
