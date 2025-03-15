@@ -22,6 +22,8 @@ WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist .
 COPY env.js ./env.js.template
 
+RUN ls -l
+
 # Install gettext for envsubst (needed for variable substitution)
 RUN apk add --no-cache gettext
 
