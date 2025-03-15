@@ -32,6 +32,10 @@ EXPOSE 80
 
 # Replace environment variables inside env.js at container start
 # CMD envsubst < env.js.template > env.js && nginx -g "daemon off;"
-CMD sh -c "envsubst < /usr/share/nginx/html/env.js.template > /usr/share/nginx/html/env.js && \
+CMD sh -c "echo 'Before envsubst:' && \
+    ls -l /usr/share/nginx/html && \
+    envsubst < /usr/share/nginx/html/env.js.template > /usr/share/nginx/html/env.js && \
+    echo 'After envsubst:' && \
+    ls -l /usr/share/nginx/html && \
     cat /usr/share/nginx/html/env.js && \
     nginx -g 'daemon off;'"
