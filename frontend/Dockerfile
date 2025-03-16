@@ -22,8 +22,6 @@ WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist .
 COPY env.js ./env.js.template
 
-RUN ls -l
-
 # Install gettext for envsubst (needed for variable substitution)
 RUN apk add --no-cache gettext
 
@@ -31,13 +29,4 @@ RUN apk add --no-cache gettext
 EXPOSE 80
 
 # Replace environment variables inside env.js at container start
-# CMD envsubst < env.js.template > env.js && nginx -g "daemon off;"
-# CMD sh -c "echo 'Before envsubst:' && \
-#     ls -l /usr/share/nginx/html && \
-#     envsubst < /usr/share/nginx/html/env.js.template > /usr/share/nginx/html/env.js && \
-#     echo 'After envsubst:' && \
-#     ls -l /usr/share/nginx/html && \
-#     cat /usr/share/nginx/html/env.js && \
-#     nginx -g 'daemon off;'"
-
-ENTRYPOINT ["/bin/sh", "-c", "ls -l && /docker-entrypoint.sh && ls -l"]
+CMD envsubst < env.js.template > env.js && nginx -g "daemon off;"
