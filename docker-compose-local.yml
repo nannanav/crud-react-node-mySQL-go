@@ -18,20 +18,20 @@ services:
       - app-network
 
   frontend:
-    image: frontend:latest
+    image: frontend
     build: ./frontend
     container_name: frontend
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - backend
     networks:
       - app-network
     environment:
-      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+      - VITE_BACKEND_URL=/api
 
   backend:
-    image: backend:latest
+    image: backend
     build: ./backend
     container_name: backend
     ports:
@@ -43,9 +43,23 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - VITE_BACKEND_URL=/api
     depends_on:
       mysql:
         condition: service_healthy
+
+
+  internal-reverse-proxy:
+    image: internal-reverse-proxy
+    build: ./internal-reverse-proxy
+    container_name: internal-reverse-proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
 
 
 volumes:

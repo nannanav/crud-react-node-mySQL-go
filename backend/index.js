@@ -14,6 +14,8 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
+const api_prefix = process.env.VITE_BACKEND_URL;
+
 db.connect((err) => {
     if (err) {
         console.error("Error connecting to MySQL: ", err);
@@ -32,7 +34,7 @@ app.get("/", (req,res)=>{
 })
 
 //postman -> get method  http://localhost:8800/books
-app.get("/books", (req,res)=>{
+app.get(api_prefix+"/books", (req,res)=>{
     console.log("get books called")
     const query = "SELECT * FROM books"
     db.query(query, (err,data)=>{
@@ -55,7 +57,7 @@ app.get("/books", (req,res)=>{
 // "cover": "cover from client"
 // }
 
-  app.post("/books", (req,res)=>{
+  app.post(api_prefix+"/books", (req,res)=>{
     console.log("post books called")
     const query = "INSERT INTO books (`title`, `description`, `price`, `cover`) VALUES (?)"
     const values = [
@@ -71,7 +73,7 @@ app.get("/books", (req,res)=>{
     })
   })
 
-  app.delete("/books/:id", (req,res)=>{
+  app.delete(api_prefix+"/books/:id", (req,res)=>{
       console.log("delete books called")
       const bookID = req.params.id
       const query = "DELETE FROM books WHERE id = ?"
@@ -82,7 +84,7 @@ app.get("/books", (req,res)=>{
       } )
   })
 
-  app.put("/books/:id", (req,res)=>{
+  app.put(api_prefix+"/books/:id", (req,res)=>{
     console.log("put books called")
     const bookID = req.params.id
     const query = "UPDATE books SET `title`= ?, `description`= ?, `price`= ?, `cover`= ? WHERE id = ?";

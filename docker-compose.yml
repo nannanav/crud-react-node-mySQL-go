@@ -23,11 +23,24 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - VITE_BACKEND_URL=/api
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "${DB_HOST}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  internal-reverse-proxy:
+    image: "${AWS_ECR_URI}/internal-reverse-proxy:latest"
+    build: ./internal-reverse-proxy
+    container_name: internal-reverse-proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
 
 networks:
   app-network:
