@@ -132,3 +132,4 @@ fi
 echo "New version: $NEW_VERSION"
 git tag "$NEW_VERSION"
 git push origin "$NEW_VERSION"
+
