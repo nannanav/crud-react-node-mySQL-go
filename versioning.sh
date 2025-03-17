@@ -5,6 +5,8 @@ set -e  # Exit immediately if a command exits with a non-zero status
 # Fetch latest tags
 LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
 LATEST_RC_TAG=$(git tag --list "v*-rc.*" | sort -V | tail -n1 || echo "")
+# LATEST_TAG="v4.0.0"
+# LATEST_RC_TAG="v4.0.1-rc.2"
 
 # Extract version numbers from latest stable and RC tags
 PREV_STABLE_MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1 | tr -d 'v')
@@ -30,6 +32,11 @@ HAS_PATCH_BUMP=$([[ "$RC_PATCH" -gt "$PREV_STABLE_PATCH" ]] && echo true || echo
 
 # Read the latest commit message
 COMMIT_MSG=$(git log -1 --pretty=%B)
+# COMMIT_MSG="fix"
+
+echo "LATEST_TAG: $LATEST_TAG"
+echo "LATEST_RC_TAG: $LATEST_RC_TAG"
+echo "COMMIT_MSG: $COMMIT_MSG"
 
 # Version bump logic
 echo "executing version bump logic"
@@ -97,6 +104,6 @@ fi
 
 # Output the new version and tag it in git
 echo "New version: $NEW_VERSION"
-git tag "$NEW_VERSION"
-git push origin "$NEW_VERSION"
+# git tag "$NEW_VERSION"
+# git push origin "$NEW_VERSION"
 
