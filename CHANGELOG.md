@@ -1,3 +1,15 @@
+# [2.0.0-rc.1](https://github.com/nannanav/crud-react-node-mySQL-go/compare/v1.1.0-rc.3...v2.0.0-rc.1) (2025-03-17)
+
+
+### Bug Fixes
+
+* comments ([e2b546a](https://github.com/nannanav/crud-react-node-mySQL-go/commit/e2b546a6beac29ec424b02ce797a0e373d409d6f))
+
+
+### BREAKING CHANGES
+
+* added comments
+
 # [1.1.0-rc.3](https://github.com/nannanav/crud-react-node-mySQL-go/compare/v1.1.0-rc.2...v1.1.0-rc.3) (2025-03-17)
 
 
