@@ -111,16 +111,12 @@ else
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.0-rc.$RC_NUMBER"
 
   elif [[ $COMMIT_MSG == "fix"* ]]; then
-    echo "a"
     if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]] || [[ "$HAS_PATCH_BUMP" == "true" ]]; then
-      echo "b"
       let RC_NUMBER+=1
     else
-      echo "c"
       let RC_PATCH+=1
       RC_NUMBER=1
     fi
-    echo "d"
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH-rc.$RC_NUMBER"
 
   elif [[ $COMMIT_MSG == "release" ]]; then
