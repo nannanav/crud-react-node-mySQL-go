@@ -46,3 +46,4 @@ http://localhost/dashboard/
 <p>/ urls are redirected to frontend</p>
 <p>/api urls are redirected to backend</p>
 <p>It is set up inside a docker container</p>
+
