@@ -32,7 +32,6 @@ services:
 
   internal-reverse-proxy:
     image: "${AWS_ECR_URI}/internal-reverse-proxy:latest"
-    build: ./internal-reverse-proxy
     container_name: internal-reverse-proxy
     ports:
       - "80:80"
