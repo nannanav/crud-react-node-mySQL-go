@@ -61,6 +61,7 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
     RC_NUMBER=1
     NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.0-rc.$RC_NUMBER"
   elif [[ $COMMIT_MSG == "fix"* ]]; then
+    echo "this will create new rc with a patch bump"
     ((PREV_STABLE_PATCH++))
     RC_NUMBER=1
     NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.$PREV_STABLE_PATCH-rc.$RC_NUMBER"
@@ -92,12 +93,16 @@ else
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.0-rc.$RC_NUMBER"
 
   elif [[ $COMMIT_MSG == "fix"* ]]; then
+    echo "a"
     if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]] || [[ "$HAS_PATCH_BUMP" == "true" ]]; then
+      echo "b"
       ((RC_NUMBER++))
     else
+      echo "c"
       ((RC_PATCH++))
       RC_NUMBER=1
     fi
+    echo "d"
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH-rc.$RC_NUMBER"
 
   elif [[ $COMMIT_MSG == "release" ]]; then
