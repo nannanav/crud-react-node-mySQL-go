@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# error_handler() {
+#   local exit_code=$?
+#   echo "Error at line $1: Command '$2' failed with exit code $exit_code"
+#   exit $exit_code
+# }
+
+# trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
+
 trap 'echo "Error at line $LINENO: Command failed with exit code $?"' ERR
 set -e  # Exit immediately if a command exits with a non-zero status
 shopt -s nocasematch
@@ -70,7 +78,20 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
     else
       echo "PREV_STABLE_PATCH is a number"
     fi
-    ((PREV_STABLE_PATCH++))
+    # ((PREV_STABLE_PATCH++))
+
+    try() {
+      "$@" 2>error.log
+      local status=$?
+      if [ $status -ne 0 ]; then
+        echo "Error: Command '$*' failed with exit code $status"
+        cat error.log  # Print the actual error message
+      fi
+      return $status
+    }
+
+    try ((PREV_STABLE_PATCH++))
+
     echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
     RC_NUMBER=1
     echo "RC_NUMBER: $RC_NUMBER"
