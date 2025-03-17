@@ -58,7 +58,7 @@ echo "COMMIT_MSG: $COMMIT_MSG"
 
 # Version bump logic
 echo "executing version bump logic"
-if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_MINOR" ]] || [[ "$RC_PATCH" == "$PREV_STABLE_PATCH" ]]; then
+if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] && [[ "$RC_MINOR" == "$PREV_STABLE_MINOR" ]] && [[ "$RC_PATCH" == "$PREV_STABLE_PATCH" ]]; then
   # If not already on an RC, determine version bump based on commit message
   echo "brand new rc"
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
