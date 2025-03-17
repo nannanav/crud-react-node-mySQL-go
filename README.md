@@ -43,3 +43,5 @@ http://localhost/dashboard/
 
 # Internal Reverse Proxy
 <p>Implemented using Nginx</p>
+<p>/ urls are redirected to frontend</p>
+<p>/api urls are redirected to backend</p>
