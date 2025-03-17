@@ -62,6 +62,7 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
     NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.0-rc.$RC_NUMBER"
   elif [[ $COMMIT_MSG == "fix"* ]]; then
     echo "this will create new brand rc with a patch bump"
+    echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
     ((PREV_STABLE_PATCH++))
     echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
     RC_NUMBER=1
