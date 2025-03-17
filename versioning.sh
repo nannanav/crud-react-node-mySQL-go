@@ -90,7 +90,7 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
       return $status
     }
 
-    try ((PREV_STABLE_PATCH++))
+    try let PREV_STABLE_PATCH+=1
 
     echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
     RC_NUMBER=1
