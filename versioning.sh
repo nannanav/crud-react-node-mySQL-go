@@ -1,5 +1,6 @@
 #!/bin/bash
 
+trap 'echo "Error at line $LINENO: Command failed with exit code $?"' ERR
 set -e  # Exit immediately if a command exits with a non-zero status
 shopt -s nocasematch
 
