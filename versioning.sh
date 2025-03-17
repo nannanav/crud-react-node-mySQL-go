@@ -12,6 +12,16 @@ trap 'echo "Error at line $LINENO: Command failed with exit code $?"' ERR
 set -e  # Exit immediately if a command exits with a non-zero status
 shopt -s nocasematch
 
+try() {
+  "$@" 2>error.log
+  local status=$?
+  if [ $status -ne 0 ]; then
+    echo "Error: Command '$*' failed with exit code $status"
+    cat error.log  # Print the actual error message
+  fi
+  return $status
+}
+
 # Get latest stable release tag
 LATEST_STABLE_TAG=$(git tag --list "v*" | grep -v "rc" | sort -V | tail -n1)
 
@@ -78,17 +88,6 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
     else
       echo "PREV_STABLE_PATCH is a number"
     fi
-    # ((PREV_STABLE_PATCH++))
-
-    try() {
-      "$@" 2>error.log
-      local status=$?
-      if [ $status -ne 0 ]; then
-        echo "Error: Command '$*' failed with exit code $status"
-        cat error.log  # Print the actual error message
-      fi
-      return $status
-    }
 
     try let PREV_STABLE_PATCH+=1
 
