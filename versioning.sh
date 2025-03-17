@@ -2,18 +2,24 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Fetch latest tags
-LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-LATEST_RC_TAG=$(git tag --list "v*-rc.*" | sort -V | tail -n1 || echo "")
-# LATEST_TAG="v4.0.0"
-# LATEST_RC_TAG="v4.0.1-rc.2"
+# Get latest stable release tag
+LATEST_STABLE_TAG=$(git tag --list "v*" | grep -v "rc" | sort -V | tail -n1)
 
-# Extract version numbers from latest stable and RC tags
-PREV_STABLE_MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1 | tr -d 'v')
-PREV_STABLE_MINOR=$(echo "$LATEST_TAG" | cut -d. -f2)
-PREV_STABLE_PATCH=$(echo "$LATEST_TAG" | cut -d. -f3)
+# Extract version numbers from the latest stable tag
+if [[ -n "$LATEST_STABLE_TAG" ]]; then
+  PREV_STABLE_MAJOR=$(echo "$LATEST_STABLE_TAG" | cut -d. -f1 | tr -d 'v')
+  PREV_STABLE_MINOR=$(echo "$LATEST_STABLE_TAG" | cut -d. -f2)
+  PREV_STABLE_PATCH=$(echo "$LATEST_STABLE_TAG" | cut -d. -f3)
+else
+  PREV_STABLE_MAJOR=0
+  PREV_STABLE_MINOR=0
+  PREV_STABLE_PATCH=0
+fi
 
-if [[ $LATEST_RC_TAG == v* ]]; then
+# Get latest RC tag
+LATEST_RC_TAG=$(git tag --list "v*-rc.*" | sort -V | tail -n1)
+
+if [[ -n "$LATEST_RC_TAG" ]]; then
   RC_MAJOR=$(echo "$LATEST_RC_TAG" | cut -d. -f1 | tr -d 'v')
   RC_MINOR=$(echo "$LATEST_RC_TAG" | cut -d. -f2)
   RC_PATCH=$(echo "$LATEST_RC_TAG" | cut -d. -f3 | cut -d- -f1)
@@ -40,7 +46,7 @@ echo "COMMIT_MSG: $COMMIT_MSG"
 
 # Version bump logic
 echo "executing version bump logic"
-if [[ "$RC_NUMBER" == "0" ]]; then
+if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_MINOR" ]] || [[ "$RC_PATCH" == "$PREV_STABLE_PATCH" ]]; then
   # If not already on an RC, determine version bump based on commit message
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
     ((PREV_STABLE_MAJOR++))
