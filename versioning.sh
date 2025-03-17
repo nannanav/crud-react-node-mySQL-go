@@ -70,4 +70,3 @@ git tag "$NEW_VERSION"
 git push origin "$NEW_VERSION"
 
 echo "Tagged with $NEW_VERSION"
-
