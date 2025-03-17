@@ -32,6 +32,7 @@ HAS_PATCH_BUMP=$([[ "$RC_PATCH" -gt "$PREV_STABLE_PATCH" ]] && echo true || echo
 COMMIT_MSG=$(git log -1 --pretty=%B)
 
 # Version bump logic
+echo "executing version bump logic"
 if [[ "$RC_NUMBER" == "0" ]]; then
   # If not already on an RC, determine version bump based on commit message
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
