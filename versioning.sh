@@ -66,6 +66,8 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
     if [[ ! $PREV_STABLE_PATCH =~ ^[0-9]+$ ]]; then
       echo "Error: PREV_STABLE_PATCH is not a number ($PREV_STABLE_PATCH)"
       exit 1
+    else
+      echo "PREV_STABLE_PATCH is a number"
     fi
     ((PREV_STABLE_PATCH++))
     echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
