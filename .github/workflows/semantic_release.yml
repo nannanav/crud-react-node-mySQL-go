@@ -20,4 +20,5 @@ jobs:
       - name: Run Semantic Release
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        # run: npx semantic-release
+        run: npx --package semantic-release --package @semantic-release/changelog --package @semantic-release/commit-analyzer --package @semantic-release/release-notes-generator --package @semantic-release/git semantic-release
