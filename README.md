@@ -8,7 +8,7 @@
 
 
 # Technologies
-<p>React.js, Node.js, Express, MySQL</p>
+<p>React.js, Node.js, Express, MySQL, Docker Compose, Nginx</p>
 
 # Video Demo
 
@@ -39,3 +39,10 @@ http://localhost/dashboard/
 
 
 ![image](https://github.com/Norbert305/crud-react-node-mySQL-go/assets/83515541/4d825d2e-16a4-4a95-96b1-847e958d1a0f)
+
+
+# Internal Reverse Proxy
+<p>Implemented using Nginx</p>
+<p>/ urls are redirected to frontend</p>
+<p>/api urls are redirected to backend</p>
+<p>It is set up inside a docker container</p>

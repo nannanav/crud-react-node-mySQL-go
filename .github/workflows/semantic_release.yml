@@ -1,22 +1,23 @@
-name: Semantic Release
+name: Versioning
 
 on:
   push:
     branches:
       - main
-      - rc
 
 jobs:
-  release:
+  versioning:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          fetch-depth: 0  # Required for git describe to work properly
 
-      - name: Run Semantic Release
-        run: npx --package semantic-release --package @semantic-release/changelog --package @semantic-release/commit-analyzer --package @semantic-release/release-notes-generator --package @semantic-release/git semantic-release
+      - name: Set up Git user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Run versioning script
+        run: bash versioning.sh
