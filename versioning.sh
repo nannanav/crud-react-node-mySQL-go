@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e  # Exit immediately if a command exits with a non-zero status
+shopt -s nocasematch
 
 # Get latest stable release tag
 LATEST_STABLE_TAG=$(git tag --list "v*" | grep -v "rc" | sort -V | tail -n1)
@@ -40,7 +41,7 @@ HAS_PATCH_BUMP=$([[ "$RC_PATCH" -gt "$PREV_STABLE_PATCH" ]] && echo true || echo
 COMMIT_MSG=$(git log -1 --pretty=%B)
 # COMMIT_MSG="fix"
 
-echo "LATEST_TAG: $LATEST_TAG"
+echo "LATEST_STABLE_TAG: $LATEST_STABLE_TAG"
 echo "LATEST_RC_TAG: $LATEST_RC_TAG"
 echo "COMMIT_MSG: $COMMIT_MSG"
 
@@ -110,6 +111,6 @@ fi
 
 # Output the new version and tag it in git
 echo "New version: $NEW_VERSION"
-# git tag "$NEW_VERSION"
-# git push origin "$NEW_VERSION"
+git tag "$NEW_VERSION"
+git push origin "$NEW_VERSION"
 
