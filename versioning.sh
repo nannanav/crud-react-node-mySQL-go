@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# error_handler() {
-#   local exit_code=$?
-#   echo "Error at line $1: Command '$2' failed with exit code $exit_code"
-#   exit $exit_code
-# }
-
-# trap 'error_handler $LINENO "$BASH_COMMAND"' ERR
-
 trap 'echo "Error at line $LINENO: Command failed with exit code $?"' ERR
 set -e  # Exit immediately if a command exits with a non-zero status
 shopt -s nocasematch
