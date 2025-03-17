@@ -8,7 +8,7 @@
 
 
 # Technologies
-<p>React.js, Node.js, Express, MySQL</p>
+<p>React.js, Node.js, Express, MySQL, Docker Compose</p>
 
 # Video Demo
 
