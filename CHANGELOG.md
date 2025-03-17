@@ -1,3 +1,11 @@
+## [1.0.2-rc.1](https://github.com/nannanav/crud-react-node-mySQL-go/compare/v1.0.1...v1.0.2-rc.1) (2025-03-17)
+
+
+### Bug Fixes
+
+* testing rc branch ([7eb5d22](https://github.com/nannanav/crud-react-node-mySQL-go/commit/7eb5d224dd403a87d4ed58750a2163b3e4036be9))
+* trigger workflow on rc branch ([61bd355](https://github.com/nannanav/crud-react-node-mySQL-go/commit/61bd355df12cf6da8693a7f392f102ec2eff6d96))
+
 ## [1.0.1](https://github.com/nannanav/crud-react-node-mySQL-go/compare/v1.0.0...v1.0.1) (2025-03-17)
 
 
