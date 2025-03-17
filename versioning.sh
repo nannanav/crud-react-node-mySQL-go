@@ -59,13 +59,13 @@ echo "executing version bump logic"
 if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_MINOR" ]] || [[ "$RC_PATCH" == "$PREV_STABLE_PATCH" ]]; then
   # If not already on an RC, determine version bump based on commit message
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
-    ((PREV_STABLE_MAJOR++))
+    try let PREV_STABLE_MAJOR+=1
     PREV_STABLE_MINOR=0
     PREV_STABLE_PATCH=0
     RC_NUMBER=1
     NEW_VERSION="v$PREV_STABLE_MAJOR.0.0-rc.$RC_NUMBER"
   elif [[ $COMMIT_MSG == "feat"* ]]; then
-    ((PREV_STABLE_MINOR++))
+    try let PREV_STABLE_MINOR+=1
     PREV_STABLE_PATCH=0
     RC_NUMBER=1
     NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.0-rc.$RC_NUMBER"
@@ -105,9 +105,9 @@ else
   # Already on an RC, handle RC number increments properly
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
     if [[ "$HAS_MAJOR_BUMP" == "true" ]]; then
-      ((RC_NUMBER++))
+      let RC_NUMBER+=1
     else
-      ((RC_MAJOR++))
+      let RC_MAJOR+=1
       RC_MINOR=0
       RC_PATCH=0
       RC_NUMBER=1
@@ -116,9 +116,9 @@ else
 
   elif [[ $COMMIT_MSG == "feat"* ]]; then
     if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]]; then
-      ((RC_NUMBER++))
+      let RC_NUMBER+=1
     else
-      ((RC_MINOR++))
+      let RC_MINOR+=1
       RC_PATCH=0
       RC_NUMBER=1
     fi
@@ -128,10 +128,10 @@ else
     echo "a"
     if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]] || [[ "$HAS_PATCH_BUMP" == "true" ]]; then
       echo "b"
-      ((RC_NUMBER++))
+      let RC_NUMBER+=1
     else
       echo "c"
-      ((RC_PATCH++))
+      let RC_PATCH+=1
       RC_NUMBER=1
     fi
     echo "d"
