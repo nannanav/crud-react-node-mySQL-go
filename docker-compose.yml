@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: "${AWS_ECR_URI}/frontend:latest"
+    image: "${AWS_ECR_URI}/frontend:${TAG}"
     container_name: frontend
     ports:
       - "8080:80"
@@ -12,7 +12,7 @@ services:
       - VITE_BACKEND_URL=/api
 
   backend:
-    image: "${AWS_ECR_URI}/backend:latest"
+    image: "${AWS_ECR_URI}/backend:${TAG}"
     container_name: backend
     ports:
       - "8800:8800"
@@ -31,7 +31,7 @@ services:
       retries: 5
 
   internal-reverse-proxy:
-    image: "${AWS_ECR_URI}/internal-reverse-proxy:latest"
+    image: "${AWS_ECR_URI}/internal-reverse-proxy:${TAG}"
     container_name: internal-reverse-proxy
     ports:
       - "80:80"

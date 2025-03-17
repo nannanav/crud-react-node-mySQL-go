@@ -85,7 +85,7 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] && [[ "$RC_MINOR" == "$PREV_STABLE_
     echo "New version: $NEW_VERSION"
   else
     echo "No version bump needed"
-    exit 0
+    exit 1
   fi
 else
   # Already on an RC, handle RC number increments properly
@@ -124,7 +124,7 @@ else
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH"
   else
     echo "No version bump needed"
-    exit 0
+    exit 1
   fi
 fi
 
