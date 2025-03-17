@@ -1,73 +1,100 @@
 #!/bin/bash
 
-set -e
+set -e  # Exit immediately if a command exits with a non-zero status
 
-# Get the latest tag (finds latest version tag)
-LATEST_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v0.0.0")
+# Fetch latest tags
+LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+LATEST_RC_TAG=$(git tag --list "v*-rc.*" | sort -V | tail -n1 || echo "")
 
-# Extract major, minor, patch, and rc number
-if [[ $LATEST_TAG =~ v([0-9]+)\.([0-9]+)\.([0-9]+)(-rc\.([0-9]+))? ]]; then
-  MAJOR="${BASH_REMATCH[1]}"
-  MINOR="${BASH_REMATCH[2]}"
-  PATCH="${BASH_REMATCH[3]}"
-  RC_NUMBER="${BASH_REMATCH[5]:-0}"  # Default to 0 if not an RC
+# Extract version numbers from latest stable and RC tags
+PREV_STABLE_MAJOR=$(echo "$LATEST_TAG" | cut -d. -f1 | tr -d 'v')
+PREV_STABLE_MINOR=$(echo "$LATEST_TAG" | cut -d. -f2)
+PREV_STABLE_PATCH=$(echo "$LATEST_TAG" | cut -d. -f3)
+
+if [[ $LATEST_RC_TAG == v* ]]; then
+  RC_MAJOR=$(echo "$LATEST_RC_TAG" | cut -d. -f1 | tr -d 'v')
+  RC_MINOR=$(echo "$LATEST_RC_TAG" | cut -d. -f2)
+  RC_PATCH=$(echo "$LATEST_RC_TAG" | cut -d. -f3 | cut -d- -f1)
+  RC_NUMBER=$(echo "$LATEST_RC_TAG" | rev | cut -d. -f1 | rev)
 else
-  MAJOR=0
-  MINOR=0
-  PATCH=0
+  RC_MAJOR=$PREV_STABLE_MAJOR
+  RC_MINOR=$PREV_STABLE_MINOR
+  RC_PATCH=$PREV_STABLE_PATCH
   RC_NUMBER=0
 fi
 
-# Get latest commit message
+# Determine if RC already introduced a major/minor/patch bump
+HAS_MAJOR_BUMP=$([[ "$RC_MAJOR" -gt "$PREV_STABLE_MAJOR" ]] && echo true || echo false)
+HAS_MINOR_BUMP=$([[ "$RC_MINOR" -gt "$PREV_STABLE_MINOR" ]] && echo true || echo false)
+HAS_PATCH_BUMP=$([[ "$RC_PATCH" -gt "$PREV_STABLE_PATCH" ]] && echo true || echo false)
+
+# Read the latest commit message
 COMMIT_MSG=$(git log -1 --pretty=%B)
 
+# Version bump logic
 if [[ "$RC_NUMBER" == "0" ]]; then
-  # Not an RC, create a new RC based on commit type
+  # If not already on an RC, determine version bump based on commit message
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
-    ((MAJOR++))
-    MINOR=0
-    PATCH=0
+    ((PREV_STABLE_MAJOR++))
+    PREV_STABLE_MINOR=0
+    PREV_STABLE_PATCH=0
     RC_NUMBER=1
-    NEW_VERSION="v$MAJOR.0.0-rc.$RC_NUMBER"
+    NEW_VERSION="v$PREV_STABLE_MAJOR.0.0-rc.$RC_NUMBER"
   elif [[ $COMMIT_MSG == "feat"* ]]; then
-    ((MINOR++))
-    PATCH=0
+    ((PREV_STABLE_MINOR++))
+    PREV_STABLE_PATCH=0
     RC_NUMBER=1
-    NEW_VERSION="v$MAJOR.$MINOR.0-rc.$RC_NUMBER"
+    NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.0-rc.$RC_NUMBER"
   elif [[ $COMMIT_MSG == "fix"* ]]; then
-    ((PATCH++))
+    ((PREV_STABLE_PATCH++))
     RC_NUMBER=1
-    NEW_VERSION="v$MAJOR.$MINOR.$PATCH-rc.$RC_NUMBER"
-  elif [[ $COMMIT_MSG == "release" ]]; then
-    echo "No existing RC to release."
-    exit 1
+    NEW_VERSION="v$PREV_STABLE_MAJOR.$PREV_STABLE_MINOR.$PREV_STABLE_PATCH-rc.$RC_NUMBER"
   else
     echo "No version bump needed"
     exit 0
   fi
 else
-  # Already on an RC, increment the RC number
+  # Already on an RC, handle RC number increments properly
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
-    ((MAJOR++))
-    MINOR=0
-    PATCH=0
-    RC_NUMBER=1
-    NEW_VERSION="v$MAJOR.0.0-rc.$RC_NUMBER"
-  elif [[ $COMMIT_MSG == "feat"* ]] || [[ $COMMIT_MSG == "fix"* ]]; then
-    ((RC_NUMBER++))
-    NEW_VERSION="v$MAJOR.$MINOR.$PATCH-rc.$RC_NUMBER"
+    if [[ "$HAS_MAJOR_BUMP" == "true" ]]; then
+      ((RC_NUMBER++))
+    else
+      ((RC_MAJOR++))
+      RC_MINOR=0
+      RC_PATCH=0
+      RC_NUMBER=1
+    fi
+    NEW_VERSION="v$RC_MAJOR.0.0-rc.$RC_NUMBER"
+
+  elif [[ $COMMIT_MSG == "feat"* ]]; then
+    if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]]; then
+      ((RC_NUMBER++))
+    else
+      ((RC_MINOR++))
+      RC_PATCH=0
+      RC_NUMBER=1
+    fi
+    NEW_VERSION="v$RC_MAJOR.$RC_MINOR.0-rc.$RC_NUMBER"
+
+  elif [[ $COMMIT_MSG == "fix"* ]]; then
+    if [[ "$HAS_MAJOR_BUMP" == "true" ]] || [[ "$HAS_MINOR_BUMP" == "true" ]] || [[ "$HAS_PATCH_BUMP" == "true" ]]; then
+      ((RC_NUMBER++))
+    else
+      ((RC_PATCH++))
+      RC_NUMBER=1
+    fi
+    NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH-rc.$RC_NUMBER"
+
   elif [[ $COMMIT_MSG == "release" ]]; then
     # Promote RC to stable release (remove -rc.X)
-    NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+    NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH"
   else
     echo "No version bump needed"
     exit 0
   fi
 fi
 
-# Tag the commit with the new version
+# Output the new version and tag it in git
+echo "New version: $NEW_VERSION"
 git tag "$NEW_VERSION"
 git push origin "$NEW_VERSION"
-
-echo "Tagged with $NEW_VERSION"
-
