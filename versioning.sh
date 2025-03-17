@@ -60,6 +60,7 @@ echo "COMMIT_MSG: $COMMIT_MSG"
 echo "executing version bump logic"
 if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_MINOR" ]] || [[ "$RC_PATCH" == "$PREV_STABLE_PATCH" ]]; then
   # If not already on an RC, determine version bump based on commit message
+  echo "brand new rc"
   if [[ $COMMIT_MSG == "feat!"* ]] || [[ $COMMIT_MSG == "fix!"* ]]; then
     try let PREV_STABLE_MAJOR+=1
     PREV_STABLE_MINOR=0
@@ -74,12 +75,6 @@ if [[ "$RC_MAJOR" == "$PREV_STABLE_MAJOR" ]] || [[ "$RC_MINOR" == "$PREV_STABLE_
   elif [[ $COMMIT_MSG == "fix"* ]]; then
     echo "this will create new brand rc with a patch bump"
     echo "PREV_STABLE_PATCH: $PREV_STABLE_PATCH"
-    if [[ ! $PREV_STABLE_PATCH =~ ^[0-9]+$ ]]; then
-      echo "Error: PREV_STABLE_PATCH is not a number ($PREV_STABLE_PATCH)"
-      exit 1
-    else
-      echo "PREV_STABLE_PATCH is a number"
-    fi
 
     try let PREV_STABLE_PATCH+=1
 
