@@ -6,7 +6,7 @@ WORKDIR /etc/nginx
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose HTTP and HTTPS ports
+# Expose HTTP port
 EXPOSE 80
 
 # Start Nginx
