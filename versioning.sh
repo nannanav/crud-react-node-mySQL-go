@@ -119,7 +119,7 @@ else
     fi
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH-rc.$RC_NUMBER"
 
-  elif [[ $COMMIT_MSG == "release" ]]; then
+  elif [[ $COMMIT_MSG == "release"* ]]; then
     # Promote RC to stable release (remove -rc.X)
     NEW_VERSION="v$RC_MAJOR.$RC_MINOR.$RC_PATCH"
   else
