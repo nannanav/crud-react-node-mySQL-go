@@ -34,7 +34,7 @@ const handleDelete = async (id)=>{
 
   return (
     <div>
-  <h1>Nannan RC1 Book Shop</h1>
+  <h1>Lama Book Shop</h1>
   <div className="books">
     {books.map(book=>(
     <div className="book" key={book.id}>
